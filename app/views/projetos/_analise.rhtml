@@ -1,0 +1,11 @@
+	<h3 class="<%= analise.situation_verbose %>"><%= analise.created_at %></h3>
+	<p>Dados do commit: <pre><%=h analise.dados_do_commit %></pre></p>
+	<pre><%=h analise.texto %></pre>
+	<ul>
+	<% analise.resultados.each do |resultado| %>
+	  <li class="<%= resultado.situation_verbose %>">
+	  	<b><%=h resultado.nome %></b> (<%= resultado.tempo %>s)
+	  	<pre><%=h resultado.texto %></pre>
+	  </li>
+	<% end %>
+	</ul>

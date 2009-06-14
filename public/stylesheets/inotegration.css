@@ -1,0 +1,11 @@
+.Approved, .Approved a {
+    color: green;
+}
+
+.Warnings, .Warnings a {
+    color: #aa0;
+}
+
+.Failed, .Failed a {
+    color: red;
+}
