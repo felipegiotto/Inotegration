@@ -1,4 +1,4 @@
-	<h3 class="<%= analysis.situation_verbose %>"><%= analysis.created_at %> <%= link_to_function '?' do |page| page.visual_effect :toggle_blind, "data_#{analysis.id}"; end %></h3>
+	<h3 class="<%= analysis.situation_verbose %>"><%= format_date analysis.created_at %> - <%= analysis.situation_verbose %> <%= link_to_function '?', :class => 'more_information' do |page| page.visual_effect :toggle_blind, "data_#{analysis.id}"; end %></h3>
     <div id="data_<%= analysis.id %>" style="display:none">
     	<p><b>Commit Data: </b><pre><%=h analysis.commit_data %></pre></p>
     	<% unless analysis.migration_data.blank? %>

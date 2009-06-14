@@ -1,5 +1,6 @@
 body {
     font-size: 12pt;
+    background-color: #079d00;
 }
 
 .Passed, .Passed a {
@@ -7,7 +8,7 @@ body {
 }
 
 .Warnings, .Warnings a {
-    color: #aa0;
+    color: #990;
 }
 
 .Failed, .Failed a {
@@ -19,10 +20,48 @@ table {
 }
 
 table td, table th {
-    padding: 5px 20px;
+    padding: 5px 25px;
+    font-size: 12pt;
 }
 
-h1 a {
+table .impar {
+    background-color: #ddd;
+}
+
+table .par {
+    background-color: #eee;
+}
+
+.more_information {
     font-size: 10pt;
 }
 
+#main_content {
+    margin: 0px auto;
+    margin-top: 20px;
+    width: 980px;
+    border: 3px black solid;
+    background-color: white;
+    padding: 15px;
+    position: relative;
+}
+
+#inotegration {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin: 0px;
+    font-size: 14pt;
+    padding: 5px;
+}
+
+#inotegration span {
+    font-size: 8pt;
+    float: right;
+}
+
+.div_analysis {
+    border: 2px black solid;
+    margin: 10px 2px;
+    padding: 10px;
+}

@@ -13,20 +13,21 @@
 <% else %>
 
 <table>
-  <tr>
+  <tr class="<%= cycle 'impar', 'par' %>">
     <th>Name</th>
-    <th>Status</th>
-    <th>Last Analysis</th>
+    <th>Build Status</th>
+    <th>Last Build</th>
   </tr>
 
 <% @projects.each do |project| %>
-  <tr class="<%= project.situation_verbose %>">
+  <tr class="<%= project.situation_verbose %> <%= cycle 'impar', 'par' %>">
     <td><%= link_to h(project.nome), project %></td>
     <td><%=h project.situation_verbose %></td>
-    <td><%=h project.last_analysis_at || 'Never' %></td>
+    <td><%= format_date(project.last_analysis_at) rescue 'Never' %></td>
   </tr>
 <% end %>
 </table>
 
 <% end %>
-<p>Last refresh: <%= Time.now.to_s :db %></p>
+<br />
+<p>Last refresh: <%= format_date Time.now %></p>

@@ -15,7 +15,9 @@ class Project < ActiveRecord::Base
   end
   
   def description
-    File.read(folder_path + '/README')
+    if File.exists? folder_path + '/README'
+      File.read(folder_path + '/README')
+    end
   end
   
   def situation_verbose
@@ -38,8 +40,6 @@ class Project < ActiveRecord::Base
       :GIT
     elsif File.exists?(folder_path + '/.svn')
       :SVN
-    else
-      :Nenhum
     end
   end
   

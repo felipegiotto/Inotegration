@@ -4,16 +4,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title><%= controller.controller_name.capitalize %>: <%= controller.action_name %></title>
+  <title>Inotegration CI: <%= @subtitle || controller.action_name.capitalize %></title>
   <%= stylesheet_link_tag 'scaffold', 'inotegration' %>
   <%= javascript_include_tag :defaults %>
   <%= yield :head %>
 </head>
 <body>
-
-<p style="color: green"><%= flash[:notice] %></p>
-
-<%= yield %>
-
+    <div id="main_content">
+        <p id="inotegration">
+            Inotegration<br />
+            <span>CI by <%= link_to 'Inovare', 'http://www.inovare.net', :target => '_blank' %></span>
+        </p>
+        <%= yield %>
+    </div>
 </body>
 </html>

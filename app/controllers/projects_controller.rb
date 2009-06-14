@@ -10,10 +10,12 @@ class ProjectsController < ApplicationController
   
   def index
     @projects = Project.all(:order => 'updated_at DESC')
+    @subtitle = 'Projects'
   end
 
   def show
     @project = Project.find(params[:id])
+    @subtitle = @project.nome
   end
 
   def show_analysis
