@@ -1,4 +1,4 @@
-class Resultado < ActiveRecord::Base
+class Result < ActiveRecord::Base
 
   APPROVED = 1
   WARNING = 2

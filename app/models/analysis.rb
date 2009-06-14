@@ -1,12 +1,12 @@
 class Analysis < ActiveRecord::Base
 
   belongs_to :project
-  has_many :resultados, :dependent => :destroy
+  has_many :results, :dependent => :destroy
   
   def situation_verbose
-    if resultados.all?{|result| result.situation == Resultado::APPROVED}
+    if results.all?{|result| result.situation == Result::APPROVED}
       'Approved'
-    elsif resultados.any?{|result| result.situation == Resultado::FAIL}
+    elsif results.any?{|result| result.situation == Result::FAIL}
       'Failed'
     else
       'Warnings'
@@ -16,11 +16,11 @@ class Analysis < ActiveRecord::Base
   def analisar(nome, impact, &block)
     antes = Time.now
     begin
-      resultado = block.call
-      return if resultado.nil?
-      r = self.resultados.build :situation => Resultado::APPROVED, :texto => resultado
+      result = block.call
+      return if result.nil?
+      r = self.results.build :situation => Result::APPROVED, :texto => result
     rescue Exception => e
-      r = self.resultados.build :situation => impact, :texto => e.message
+      r = self.results.build :situation => impact, :texto => e.message
     end
     r.nome = nome
     r.tempo = Time.now - antes

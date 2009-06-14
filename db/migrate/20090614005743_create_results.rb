@@ -1,6 +1,6 @@
-class CreateResultados < ActiveRecord::Migration
+class CreateResults < ActiveRecord::Migration
   def self.up
-    create_table :resultados do |t|
+    create_table :results do |t|
       t.integer :analysis_id
       t.string :nome
       t.text :texto
@@ -12,6 +12,6 @@ class CreateResultados < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :resultados
+    drop_table :results
   end
 end

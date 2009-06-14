@@ -2,10 +2,10 @@
 	<p>Dados do commit: <pre><%=h analysis.dados_do_commit %></pre></p>
 	<pre><%=h analysis.texto %></pre>
 	<ul>
-	<% analysis.resultados.each do |resultado| %>
-	  <li class="<%= resultado.situation_verbose %>">
-	  	<b><%=h resultado.nome %></b> (<%= resultado.tempo %>s)
-	  	<pre><%=h resultado.texto %></pre>
+	<% analysis.results.each do |result| %>
+	  <li class="<%= result.situation_verbose %>">
+	  	<b><%=h result.nome %></b> (<%= result.tempo %>s)
+	  	<pre><%=h result.texto %></pre>
 	  </li>
 	<% end %>
 	</ul>

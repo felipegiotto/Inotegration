@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(:version => 20090614005743) do
     t.datetime "updated_at"
   end
 
-  create_table "resultados", :force => true do |t|
+  create_table "results", :force => true do |t|
     t.integer  "analysis_id"
     t.string   "nome"
     t.text     "texto"

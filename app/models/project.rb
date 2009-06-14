@@ -66,11 +66,11 @@ class Project < ActiveRecord::Base
   def analisar
     ir_para_pasta_do_project || return
     
-    resultado_migration = `rake db:migrate`
-    if resultado_migration.include? 'migrating'
+    result_migration = `rake db:migrate`
+    if result_migration.include? 'migrating'
       `rake db:test:prepare`
     else
-      resultado_migration = '' 
+      result_migration = '' 
     end
 
     folders_to_analyze = ['app']
@@ -96,9 +96,9 @@ DEFAULT_CONFIG_FILE
 
     analysis = self.analyses.build
     analysis.dados_do_commit = self.dados_do_ultimo_commit
-    analysis.texto = resultado_migration unless resultado_migration.blank?
+    analysis.texto = result_migration unless result_migration.blank?
 
-    analysis.analisar 'Testes Unitários', Resultado::FAIL do
+    analysis.analisar 'Testes Unitários', Result::FAIL do
       str = `rake test:units`
       break if !str.include? 'Finished'
       if str.include?('0 failures, 0 errors')
@@ -109,7 +109,7 @@ DEFAULT_CONFIG_FILE
     end
 
 =begin
-    analysis.analisar 'Testes Funcionais', Resultado::FAIL do
+    analysis.analisar 'Testes Funcionais', Result::FAIL do
       str = `rake test:functionals`
       break if !str.include? 'Finished'
       if str.include?('0 failures, 0 errors')
@@ -119,7 +119,7 @@ DEFAULT_CONFIG_FILE
       end        
     end
 
-    analysis.analisar 'Complexidade de Código', Resultado::WARNING do
+    analysis.analisar 'Complexidade de Código', Result::WARNING do
       flog = Flog.new
       flog.flog_files folders_to_analyze
       threshold = inotegration_config['MaximumFlogComplexity'].to_i
@@ -138,7 +138,7 @@ DEFAULT_CONFIG_FILE
       end
     end
     
-    analysis.analisar 'Duplicação de Código', Resultado::WARNING do
+    analysis.analisar 'Duplicação de Código', Result::WARNING do
       threshold = inotegration_config['MaximumFlayThreshold'].to_i
       flay = Flay.new({:fuzzy => false, :verbose => false, :mass => threshold})
       flay.process(*Flay.expand_dirs_to_files(folders_to_analyze))
@@ -150,7 +150,7 @@ DEFAULT_CONFIG_FILE
       end
     end
 
-    analysis.analisar 'Qualidade de Código Roodi', Resultado::WARNING do
+    analysis.analisar 'Qualidade de Código Roodi', Result::WARNING do
       if inotegration_config['RoodiConfig'].blank?
         str = `roodi app/**/*.rb lib/**/*.rb`
       else
@@ -167,7 +167,7 @@ DEFAULT_CONFIG_FILE
     end
     
 =end
-    analysis.analisar 'Qualidade de Código Reek', Resultado::WARNING do
+    analysis.analisar 'Qualidade de Código Reek', Result::WARNING do
       if inotegration_config['ReekConfig'].blank?
         File.delete 'site.reek' if File.exists? 'site.reek'
       else
@@ -187,7 +187,7 @@ DEFAULT_CONFIG_FILE
       end
     end
     
-    analysis.analisar 'rake stats', Resultado::WARNING do
+    analysis.analisar 'rake stats', Result::WARNING do
       `rake stats`
     end
 
