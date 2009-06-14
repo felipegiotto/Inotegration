@@ -4,7 +4,7 @@ class Resultado < ActiveRecord::Base
   WARNING = 2
   FAIL = 3
   
-  belongs_to :analise
+  belongs_to :analysis
   
   def situation_verbose
     case situation

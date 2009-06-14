@@ -31,10 +31,10 @@ class ProjectsController < ApplicationController
   end
 
   def show_analysis
-    @analise = Analise.find_by_id_and_project_id params[:analysis_id], params[:id]
+    @analysis = Analysis.find_by_id_and_project_id params[:analysis_id], params[:id]
     render :update do |page|
-      dom_id = "analise_#{@analise.id}"
-      page.replace_html dom_id, :partial => 'analise'
+      dom_id = "analysis_#{@analysis.id}"
+      page.replace_html dom_id, :partial => 'analysis'
     end
   end
   

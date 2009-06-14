@@ -1,4 +1,4 @@
-class Analise < ActiveRecord::Base
+class Analysis < ActiveRecord::Base
 
   belongs_to :project
   has_many :resultados, :dependent => :destroy

@@ -1,6 +1,6 @@
-class CreateAnalises < ActiveRecord::Migration
+class CreateAnalyses < ActiveRecord::Migration
   def self.up
-    create_table :analises do |t|
+    create_table :analyses do |t|
       t.integer :project_id
       t.text :texto
       t.string :dados_do_commit
@@ -9,6 +9,6 @@ class CreateAnalises < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :analises
+    drop_table :analyses
   end
 end

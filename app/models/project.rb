@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
 
   validates_presence_of :pasta, :nome
-  has_many :analises, :order => 'created_at DESC', :dependent => :destroy
+  has_many :analyses, :order => 'created_at DESC', :dependent => :destroy
 
   def self.identificar_todos
     Dir.chdir RAILS_ROOT + '/projects'
@@ -19,12 +19,12 @@ class Project < ActiveRecord::Base
   end
   
   def situation_verbose
-    return 'Pending' if analises.empty?
-    analises.first.situation_verbose
+    return 'Pending' if analyses.empty?
+    analyses.first.situation_verbose
   end
   
-  def ultima_analise
-    analises.first.try :created_at
+  def ultima_analysis
+    analyses.first.try :created_at
   end
   
   def ir_para_pasta_do_project
@@ -94,11 +94,11 @@ DEFAULT_CONFIG_FILE
     end
     inotegration_config = YAML::load_file(pasta_completa + '/config/inotegration.yml')
 
-    analise = self.analises.build
-    analise.dados_do_commit = self.dados_do_ultimo_commit
-    analise.texto = resultado_migration unless resultado_migration.blank?
+    analysis = self.analyses.build
+    analysis.dados_do_commit = self.dados_do_ultimo_commit
+    analysis.texto = resultado_migration unless resultado_migration.blank?
 
-    analise.analisar 'Testes Unitários', Resultado::FAIL do
+    analysis.analisar 'Testes Unitários', Resultado::FAIL do
       str = `rake test:units`
       break if !str.include? 'Finished'
       if str.include?('0 failures, 0 errors')
@@ -109,7 +109,7 @@ DEFAULT_CONFIG_FILE
     end
 
 =begin
-    analise.analisar 'Testes Funcionais', Resultado::FAIL do
+    analysis.analisar 'Testes Funcionais', Resultado::FAIL do
       str = `rake test:functionals`
       break if !str.include? 'Finished'
       if str.include?('0 failures, 0 errors')
@@ -119,7 +119,7 @@ DEFAULT_CONFIG_FILE
       end        
     end
 
-    analise.analisar 'Complexidade de Código', Resultado::WARNING do
+    analysis.analisar 'Complexidade de Código', Resultado::WARNING do
       flog = Flog.new
       flog.flog_files folders_to_analyze
       threshold = inotegration_config['MaximumFlogComplexity'].to_i
@@ -138,7 +138,7 @@ DEFAULT_CONFIG_FILE
       end
     end
     
-    analise.analisar 'Duplicação de Código', Resultado::WARNING do
+    analysis.analisar 'Duplicação de Código', Resultado::WARNING do
       threshold = inotegration_config['MaximumFlayThreshold'].to_i
       flay = Flay.new({:fuzzy => false, :verbose => false, :mass => threshold})
       flay.process(*Flay.expand_dirs_to_files(folders_to_analyze))
@@ -150,7 +150,7 @@ DEFAULT_CONFIG_FILE
       end
     end
 
-    analise.analisar 'Qualidade de Código Roodi', Resultado::WARNING do
+    analysis.analisar 'Qualidade de Código Roodi', Resultado::WARNING do
       if inotegration_config['RoodiConfig'].blank?
         str = `roodi app/**/*.rb lib/**/*.rb`
       else
@@ -167,7 +167,7 @@ DEFAULT_CONFIG_FILE
     end
     
 =end
-    analise.analisar 'Qualidade de Código Reek', Resultado::WARNING do
+    analysis.analisar 'Qualidade de Código Reek', Resultado::WARNING do
       if inotegration_config['ReekConfig'].blank?
         File.delete 'site.reek' if File.exists? 'site.reek'
       else
@@ -187,7 +187,7 @@ DEFAULT_CONFIG_FILE
       end
     end
     
-    analise.analisar 'rake stats', Resultado::WARNING do
+    analysis.analisar 'rake stats', Resultado::WARNING do
       `rake stats`
     end
 

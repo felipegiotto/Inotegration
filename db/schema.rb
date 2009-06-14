@@ -11,7 +11,7 @@
 
 ActiveRecord::Schema.define(:version => 20090614005743) do
 
-  create_table "analises", :force => true do |t|
+  create_table "analyses", :force => true do |t|
     t.integer  "project_id"
     t.text     "texto"
     t.string   "dados_do_commit"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 20090614005743) do
   end
 
   create_table "resultados", :force => true do |t|
-    t.integer  "analise_id"
+    t.integer  "analysis_id"
     t.string   "nome"
     t.text     "texto"
     t.integer  "tempo"

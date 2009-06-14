@@ -1,7 +1,7 @@
 class CreateResultados < ActiveRecord::Migration
   def self.up
     create_table :resultados do |t|
-      t.integer :analise_id
+      t.integer :analysis_id
       t.string :nome
       t.text :texto
       t.integer :tempo
