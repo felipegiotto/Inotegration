@@ -79,4 +79,6 @@ to make some experiments. Then, suddenly, Inotegration was born!
 Now, it's sunday afternoon, soon I'll go home and I want to publish my code as
 soon as possible. So, I'll put this code on Github and then, when I have some free time,
 according to the good TDD practices, I'll delete each piece of my code, 
-make some tests and develop Inotegration again from scratch.
+make some tests and develop Inotegration again from scratch. These modifications
+will soon be available in Github
+
