@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(:version => 20090614005743) do
     t.integer  "project_id"
     t.text     "texto"
     t.string   "dados_do_commit"
+    t.boolean  "finished"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

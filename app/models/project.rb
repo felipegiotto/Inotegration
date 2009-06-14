@@ -19,7 +19,7 @@ class Project < ActiveRecord::Base
   end
   
   def situation_verbose
-    return 'Pending' if analyses.empty?
+    return 'Warnings' if analyses.empty?
     analyses.first.situation_verbose
   end
   
@@ -53,16 +53,37 @@ class Project < ActiveRecord::Base
   end
   
   def check_for_modifications_and_analyse
+    fetch_modifications || analyses.empty?
+    analyse
+  end
+  
+  def fetch_modifications
     go_to_project_folder || return
     case repository_type
     when :GIT; return if `git pull`.include?('Already up-to-date')
     when :SVN; return if `svn update`.include?('Na revisão')
-    else return
     end
-    
-    analyse
+    return true
   end
   
+  def create_default_config_file_if_needed
+    unless File.exists?(folder_path + '/config/inotegration.yml')
+    File.open folder_path + '/config/inotegration.yml', 'w' do |f|
+      f.puts <<-DEFAULT_CONFIG_FILE
+MaximumFlogComplexity: 10
+MaximumFlayThreshold: 10
+RoodiConfig:
+  # Insert here your custom roody checks, like:
+  # ClassNameCheck:                  { pattern: !ruby/regexp /^[A-Z][a-zA-Z0-9]*$/ }
+ReekConfig:
+  # Insert here your custom reek checks, like:
+  # NestedIterators: 
+  #  enabled: false
+DEFAULT_CONFIG_FILE
+      end
+    end
+  end
+
   def analyse
     go_to_project_folder || return
     
@@ -77,29 +98,17 @@ class Project < ActiveRecord::Base
     folder_names_to_analyze << 'lib' unless Dir.glob('lib/*.rb').empty?
     files_to_analyze = folder_names_to_analyze.collect{|folder_name| "#{folder_name}/**/*.rb"}.join ' '
 
-    unless File.exists?(folder_path + '/config/inotegration.yml')
-      File.open folder_path + '/config/inotegration.yml', 'w' do |f|
-        f.puts <<-DEFAULT_CONFIG_FILE
-MaximumFlogComplexity: 10
-MaximumFlayThreshold: 10
-RoodiConfig:
-  # Insert here your custom roody checks, like:
-  # ClassNameCheck:                  { pattern: !ruby/regexp /^[A-Z][a-zA-Z0-9]*$/ }
-ReekConfig:
-  # Insert here your custom reek checks, like:
-  # NestedIterators: 
-  #  enabled: false
-DEFAULT_CONFIG_FILE
-      end
-    end
+    create_default_config_file_if_needed
+    
     inotegration_config = YAML::load_file(folder_path + '/config/inotegration.yml')
 
     analysis = self.analyses.build
     analysis.dados_do_commit = self.last_commit_data
     analysis.texto = result_migration unless result_migration.blank?
+    analysis.save!
 
     analysis.make 'Unit Tests', Result::FAIL do
-      str = `rake test:units`
+      str = `rake test`
       break if !str.include? 'Finished'
       if str.include?('0 failures, 0 errors')
         str
@@ -191,7 +200,9 @@ DEFAULT_CONFIG_FILE
       `rake stats`
     end
 
-    self.nome_will_change!
+    analysis.finished = true
+    analysis.save!
+    self.updated_at_will_change!
     self.save!
   end
   

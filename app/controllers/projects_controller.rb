@@ -16,20 +16,6 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
 
-  def edit
-    @project = Project.find(params[:id])
-  end
-
-  def update
-    @project = Project.find(params[:id])
-    if @project.update_attributes(params[:project])
-      flash[:notice] = 'Projeto was successfully updated.'
-      redirect_to(@project)
-    else
-      render :action => "edit"
-    end
-  end
-
   def show_analysis
     @analysis = Analysis.find_by_id_and_project_id params[:analysis_id], params[:id]
     render :update do |page|

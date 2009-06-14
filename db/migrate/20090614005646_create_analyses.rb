@@ -4,6 +4,7 @@ class CreateAnalyses < ActiveRecord::Migration
       t.integer :project_id
       t.text :texto
       t.string :dados_do_commit
+      t.boolean :finished
       t.timestamps
     end
   end

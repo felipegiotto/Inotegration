@@ -1,3 +1,7 @@
+body {
+    font-size: 12pt;
+}
+
 .Approved, .Approved a {
     color: green;
 }
@@ -8,4 +12,12 @@
 
 .Failed, .Failed a {
     color: red;
+}
+
+table {
+    border: 2px black solid;
+}
+
+table td, table th {
+    padding: 5px 20px;
 }

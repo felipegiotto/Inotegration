@@ -3,35 +3,35 @@
 <pre><%=h @project.description %></pre>
 
 <p>
-  <b>Situação:</b>
+  <b>Status:</b>
   <%= @project.situation_verbose %>
 </p>
 
 <p>
-  <b>Pasta:</b>
-  <%=h @project.folder_name %>
-</p>
-
-<p>
-  <b>Repositório:</b>
+  <b>Repository Type:</b>
   <%= @project.repository_type %>
 </p>
 
 <p>
-  <b>Dados do último commit:</b>
+  <b>Last Commit Data:</b>
   <pre><%= @project.last_commit_data %></pre>
 </p>
 
-<%= link_to 'Alterar', edit_project_path(@project) %> |
-<%= link_to 'Analisar', analisar_project_path(@project), :method => :post %> |
-<%= link_to 'Voltar', projects_path %>
+<% if @project.analyses.empty? %>
 
-<h2>Últimas Análises</h2>
+	<p><b>This project has not been analysed yet. You may click "Force Analysis" now or wait until the next scheduled analysis.</b></p>
 
-<% @project.analyses.each do |analysis| %>
-
-	<div id="analysis_<%= analysis.id %>">
-	<h3 class="<%= analysis.situation_verbose %>"><%= link_to_remote analysis.created_at, :url => show_analysis_project_path(@project, :analysis_id => analysis.id) %></h3>
-	</div>
-
+<% else %>
+	<h2>Últimas Análises</h2>
+	
+	<% @project.analyses.each do |analysis| %>
+	
+		<div id="analysis_<%= analysis.id %>">
+		<h3 class="<%= analysis.situation_verbose %>"><%= link_to_remote analysis.created_at, :url => show_analysis_project_path(@project, :analysis_id => analysis.id) %></h3>
+		</div>
+	
+	<% end %>
 <% end %>
+
+<%= link_to 'Force Analysis', analisar_project_path(@project), :method => :post %> |
+<%= link_to 'Back', projects_path %>

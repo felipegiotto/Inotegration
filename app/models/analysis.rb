@@ -4,7 +4,9 @@ class Analysis < ActiveRecord::Base
   has_many :results, :dependent => :destroy
   
   def situation_verbose
-    if results.all?{|result| result.situation == Result::APPROVED}
+    if !finished?
+      'Running'
+    elsif results.all?{|result| result.situation == Result::APPROVED}
       'Approved'
     elsif results.any?{|result| result.situation == Result::FAIL}
       'Failed'
@@ -14,6 +16,7 @@ class Analysis < ActiveRecord::Base
   end
 
   def make(nome, impact, &block)
+    project.go_to_project_folder
     antes = Time.now
     begin
       result = block.call
@@ -24,6 +27,7 @@ class Analysis < ActiveRecord::Base
     end
     r.nome = nome
     r.tempo = Time.now - antes
+    self.save
   end
 
 end
