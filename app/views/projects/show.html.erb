@@ -1,6 +1,6 @@
 <h1 class="<%= @project.situation_verbose %>"><%=h @project.nome %></h1>
 
-<pre><%=h @project.descricao %></pre>
+<pre><%=h @project.description %></pre>
 
 <p>
   <b>Situação:</b>
@@ -9,17 +9,17 @@
 
 <p>
   <b>Pasta:</b>
-  <%=h @project.pasta %>
+  <%=h @project.folder_name %>
 </p>
 
 <p>
   <b>Repositório:</b>
-  <%= @project.repositorio %>
+  <%= @project.repository_type %>
 </p>
 
 <p>
   <b>Dados do último commit:</b>
-  <pre><%= @project.dados_do_ultimo_commit %></pre>
+  <pre><%= @project.last_commit_data %></pre>
 </p>
 
 <%= link_to 'Alterar', edit_project_path(@project) %> |

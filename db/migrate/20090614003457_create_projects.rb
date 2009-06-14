@@ -2,7 +2,7 @@ class CreateProjects < ActiveRecord::Migration
   def self.up
     create_table :projects do |t|
       t.string :nome
-      t.string :pasta
+      t.string :folder_name
       
       t.timestamps
     end

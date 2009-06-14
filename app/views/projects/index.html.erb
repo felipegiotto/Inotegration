@@ -10,8 +10,8 @@
 <% @projects.each do |project| %>
   <tr class="<%= project.situation_verbose %>">
     <td><%= link_to h(project.nome), project %></td>
-    <td><pre><%=h truncate(project.descricao, 100) %></pre></td>
-    <td><%=h project.ultima_analysis %></td>
+    <td><pre><%=h truncate(project.description, 100) %></pre></td>
+    <td><%=h project.last_analysis_at %></td>
   </tr>
 <% end %>
 </table>

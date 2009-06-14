@@ -46,7 +46,7 @@ end
 class Flay
   def report_string prune = nil
     out = ""
-    out += "Pontuação total (menor é melhor) = #{self.total}\n"
+    out += "Total score (smaller is better) = #{self.total}\n"
 
     count = 0
     masses.sort_by { |h,m| [-m, hashes[h].first.file] }.each do |hash, mass|
@@ -58,13 +58,13 @@ class Flay
       node = nodes.first
       n = nodes.size
       match, bonus = if same then
-                       ["IDÊNTICO", "*#{n}"]
+                       ["IDENTICAL", "*#{n}"]
                      else
                        ["Similar",   ""]
                      end
 
       count += 1
-      out += "%d) Código %s encontrado em %p (duplicação%s = %d)\n" %
+      out += "%d) %s code found in %p (score %s = %d)\n" %
         [count, match, node.first, bonus, mass]
 
       nodes.each_with_index do |node, i|

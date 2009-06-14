@@ -13,7 +13,7 @@ class Analysis < ActiveRecord::Base
     end
   end
 
-  def analisar(nome, impact, &block)
+  def make(nome, impact, &block)
     antes = Time.now
     begin
       result = block.call

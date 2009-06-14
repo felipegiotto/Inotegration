@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   def analisar
     @project = Project.find params[:id]
 #    Thread.new do
-      @project.analisar
+      @project.analyse
 #    end
     redirect_to @project
   end
@@ -33,8 +33,7 @@ class ProjectsController < ApplicationController
   def show_analysis
     @analysis = Analysis.find_by_id_and_project_id params[:analysis_id], params[:id]
     render :update do |page|
-      dom_id = "analysis_#{@analysis.id}"
-      page.replace_html dom_id, :partial => 'analysis'
+      page.replace_html "analysis_#{@analysis.id}", :partial => 'analysis'
     end
   end
   
