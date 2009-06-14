@@ -18,7 +18,7 @@ Rails::Initializer.run do |config|
   config.gem 'flog'
   config.gem 'flay'
   config.gem 'roodi'
-  config.gem 'javan-whenever', :source => 'http://gems.github.com'
+  config.gem 'javan-whenever', :source => 'http://gems.github.com', :lib => false
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"

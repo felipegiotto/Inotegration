@@ -2,7 +2,7 @@ body {
     font-size: 12pt;
 }
 
-.Approved, .Approved a {
+.Passed, .Passed a {
     color: green;
 }
 
@@ -21,3 +21,8 @@ table {
 table td, table th {
     padding: 5px 20px;
 }
+
+h1 a {
+    font-size: 10pt;
+}
+

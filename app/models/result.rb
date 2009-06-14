@@ -8,7 +8,7 @@ class Result < ActiveRecord::Base
   
   def situation_verbose
     case situation
-    when APPROVED; 'Approved'
+    when APPROVED; 'Passed'
     when WARNING; 'Warnings'
     when FAIL;   'Failed'
     end

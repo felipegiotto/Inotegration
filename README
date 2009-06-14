@@ -1,30 +1,82 @@
 == Welcome to Inotegration
 
-Inotegration was made by Inovare (http://www.inovare.net) to help Rails programmers and companies to do easy Continuous Integration with RubyOnRails.
+Inotegration was made by Inovare (http://www.inovare.net) to help Rails 
+programmers and companies to do easy Asynchronous Continuous Integration 
+with RubyOnRails, without needing to edit giant XML files.
 
 Inotegration runs any tests, specs and metrics inside your project.
 
+PLEASE! Feel free to send suggestions, patches, complains, bugs, anything related 
+to Inotegration to me (felipegiotto@gmail.com), I'll answer as soon as
+possible!
+
 == Getting Started
 
-To use Inotegration, you have to follow these three steps:
+To use Inotegration, you have to follow these steps:
 
-1. Create simlinks inside the "projects" folder to each of your projects.
-2. Run "rake projects:schedule_analyses" once to update your crontab and schedule periodical analyses
-3. There's no third step! You're ready to use Inotegration!
+1. Install any missing gems with "sudo rake gems:install"
+2. Create simlinks inside the "projects" folder to each of your projects.
+3. Run "rake projects:schedule_analyses" once to update your crontab and 
+schedule periodical analyses
+4. There's no fourth step! You're ready to use Inotegration! Migrate your production 
+database, start the server and try!
+
+You need to use the production environment, because the "whenever" gem schedules 
+the updates in the production database. If you need to change this behavior, type
+"crontab -e" manually and change the RAILS_ENV manually.
 
 == Information
 
-Inotegration was created by Felipe Giotto (felipegiotto@gmail.com) from Inovare (http://www.inovare.net) and was inspired by Marty Andrews (http://blog.martyandrews.net), more specifically by one of his posts, "Enforcing Ruby code quality" (http://blog.martyandrews.net/2009/05/enforcing-ruby-code-quality.html).
+Inotegration was created by Felipe Giotto (felipegiotto@gmail.com) from 
+Inovare (http://www.inovare.net) and was inspired by Marty Andrews 
+(http://blog.martyandrews.net), more specifically by one of his posts, 
+"Enforcing Ruby code quality" (http://blog.martyandrews.net/2009/05/enforcing-ruby-code-quality.html).
 
-Inotegration checks for modification in GIT and SVN repositories, periodically running "svn update" or "git pull" commands. If any changes are fetch from the repository, Inotegration starts the above tasks, storing the results in the database.
+Inotegration checks for modification in GIT and SVN repositories, periodically 
+running "svn update" or "git pull" commands. If any changes are fetched from the 
+repository, Inotegration starts the above tasks, storing the results in the database.
 
 These tasks are performed by Inotegration to each of your projects:
 
 1. Unit and Funcional tests (Test::Unit)
-2. Specs (not ready yet)
+2. Specs
 3. Flog Code Complexity Analysis (see http://ruby.sadi.st/Flog.html for more information)
 4. Flay Code Duplication Analysis (see http://ruby.sadi.st/Flay.html for more information)
 5. Roodi Code Quality Analysis (see http://roodi.rubyforge.org for more information)
-6. Reek Code Quality Analysis (see http://wiki.github.com/kevinrutherford/reek for more information)
+6. Reek Code Quality Analysis (see http://wiki.github.com/kevinrutherford/reek for 
+more information)
 7. Finally, "rake stats"
 
+Inotegration was built with Ubuntu 9.X, but it should work with most operational systems.
+With Windows (blearghhh!), you may need to manually schedule the "rake projects:analyse"
+to run periodically, since Inotegration uses cron to schedule tasks.
+
+== Customization
+
+You may customize Flog, Flay, Roodi and Reek by editing "config/inotegration.yml" 
+(created automatically).
+
+The MaximumFlogComplexity key stores the complexity threshold from Flog. 
+You can change this threshold to any value you want.
+We recommend reading the Flog README file for more information.
+
+The MaximumFlayThreshold key stores the duplication threshold from Flay.
+You can change this threshold to any value you want.
+We recommend reading the Flay README file for more information.
+
+The RoodiConfig key stores many keys and values to customize Roodi.
+We recommend reading the Roodi README file for more information.
+
+The ReekConfig key stores many keys and values to customize Reek
+We recommend reading the Reek README file for more information.
+
+== Excuses
+
+I'm a big fan of TDD and BDD. But, this is my story: I'm at my family's house,
+in a Valentine's Day, without my girlfriend. So, I decided to use these "free" days 
+to make some experiments. Then, suddenly, Inotegration was born!
+
+Now, it's sunday afternoon, soon I'll go home and I want to publish my code as
+soon as possible. So, I'll put this code on Github and then, when I have some free time,
+according to the good TDD practices, I'll delete each piece of my code, 
+make some tests and develop Inotegration again from scratch.

@@ -1,11 +1,12 @@
-<h1 class="<%= @project.situation_verbose %>"><%=h @project.nome %></h1>
+<h1 class="<%= @project.situation_verbose %>"><%=h @project.nome %> <%= link_to_function '?' do |page| page.visual_effect :toggle_blind, :more_info; end %></h1>
 
-<pre><%=h @project.description %></pre>
-
-<p>
-  <b>Status:</b>
+<p class="<%= @project.situation_verbose %>">
+  <b>Analysis Status:</b>
   <%= @project.situation_verbose %>
 </p>
+
+<div id="more_info" style="display:none">
+<pre><%=h @project.description %></pre>
 
 <p>
   <b>Repository Type:</b>
@@ -16,13 +17,16 @@
   <b>Last Commit Data:</b>
   <pre><%= @project.last_commit_data %></pre>
 </p>
+</div>
 
 <% if @project.analyses.empty? %>
 
 	<p><b>This project has not been analysed yet. You may click "Force Analysis" now or wait until the next scheduled analysis.</b></p>
 
 <% else %>
-	<h2>Últimas Análises</h2>
+
+	<br />
+	<h2>Recent Analyses</h2>
 	
 	<% @project.analyses.each do |analysis| %>
 	
@@ -33,5 +37,5 @@
 	<% end %>
 <% end %>
 
-<%= link_to 'Force Analysis', analisar_project_path(@project), :method => :post %> |
+<%= link_to 'Force Analysis NOW', analisar_project_path(@project), :method => :post %> |
 <%= link_to 'Back', projects_path %>

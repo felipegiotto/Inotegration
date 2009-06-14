@@ -53,15 +53,18 @@ class Project < ActiveRecord::Base
   end
   
   def check_for_modifications_and_analyse
-    fetch_modifications || analyses.empty?
-    analyse
+    analyse if fetch_modifications || analyses.empty?
   end
   
   def fetch_modifications
     go_to_project_folder || return
     case repository_type
-    when :GIT; return if `git pull`.include?('Already up-to-date')
-    when :SVN; return if `svn update`.include?('Na revisão')
+    when :GIT; 
+      return if `git pull`.include?('Already up-to-date')
+    when :SVN; 
+      output = `svn update`
+      return if output.blank? || output.include?('Na revisão') || output.include?('At revision')
+    else return
     end
     return true
   end
@@ -87,28 +90,38 @@ DEFAULT_CONFIG_FILE
   def analyse
     go_to_project_folder || return
     
-    result_migration = `rake db:migrate`
-    if result_migration.include? 'migrating'
+    migration_info = `rake db:migrate`
+    if migration_info.include? 'migrating'
       `rake db:test:prepare`
     else
-      result_migration = '' 
+      migration_info = nil
     end
 
-    folder_names_to_analyze = ['app']
-    folder_names_to_analyze << 'lib' unless Dir.glob('lib/*.rb').empty?
-    files_to_analyze = folder_names_to_analyze.collect{|folder_name| "#{folder_name}/**/*.rb"}.join ' '
+    folder_names_to_analyse = ['app']
+    folder_names_to_analyse << 'lib' unless Dir.glob('lib/*.rb').empty?
+    files_to_analyse = folder_names_to_analyse.collect{|folder_name| "#{folder_name}/**/*.rb"}.join ' '
 
     create_default_config_file_if_needed
     
     inotegration_config = YAML::load_file(folder_path + '/config/inotegration.yml')
 
     analysis = self.analyses.build
-    analysis.dados_do_commit = self.last_commit_data
-    analysis.texto = result_migration unless result_migration.blank?
+    analysis.commit_data = self.last_commit_data
+    analysis.migration_data = migration_info
     analysis.save!
+    
+    analysis.make 'Spec', Result::FAIL do
+      str = `rake spec`
+      break if !str.include? 'Finished'
+      if str.include?('0 failures')
+        str
+      else
+        raise str
+      end        
+    end
 
     analysis.make 'Unit Tests', Result::FAIL do
-      str = `rake test`
+      str = `rake test:units`
       break if !str.include? 'Finished'
       if str.include?('0 failures, 0 errors')
         str
@@ -117,7 +130,6 @@ DEFAULT_CONFIG_FILE
       end        
     end
 
-=begin
     analysis.make 'Functional Tests', Result::FAIL do
       str = `rake test:functionals`
       break if !str.include? 'Finished'
@@ -130,7 +142,7 @@ DEFAULT_CONFIG_FILE
 
     analysis.make 'Code Complexity (Flog)', Result::WARNING do
       flog = Flog.new
-      flog.flog_files folder_names_to_analyze
+      flog.flog_files folder_names_to_analyse
       threshold = inotegration_config['MaximumFlogComplexity'].to_i
     
       bad_methods = flog.totals.select do |name, score|
@@ -138,24 +150,24 @@ DEFAULT_CONFIG_FILE
       end
       
       if bad_methods.empty?
-        "Nenhum método com complexidade maior que #{threshold} foi encontrado.\nPara alterar este limite, edite o arquivo config/inotegration.yml e altere a chave 'MaximumFlogComplexity'."
+        "No method found with complexity > #{threshold}.\nTo change this limit, check README file."
       else
         bad_methods = bad_methods.sort { |a,b| a[1] <=> b[1] }.collect do |name, score|
           "%8.1f: %s" % [score, name]
         end
-        raise "#{bad_methods.length} method(s) with complexity > #{threshold}:\n#{bad_methods.join("\n")}.\nTo change this limit, open file config/inotegration.yml and change 'MaximumFlogComplexity' value."
+        raise "#{bad_methods.length} method(s) with complexity > #{threshold}:\n#{bad_methods.join("\n")}.\nTo change this limit, check README file."
       end
     end
     
     analysis.make 'Code Duplication', Result::WARNING do
       threshold = inotegration_config['MaximumFlayThreshold'].to_i
       flay = Flay.new({:fuzzy => false, :verbose => false, :mass => threshold})
-      flay.process(*Flay.expand_dirs_to_files(folder_names_to_analyze))
+      flay.process(*Flay.expand_dirs_to_files(folder_names_to_analyse))
     
       if flay.masses.empty?
-        "Não há nenhum bloco de código que possua duplicações com limite maior que #{threshold}.\nPara alterar este limite, edite o arquivo config/inotegration.yml e altere a chave 'MaximumFlayThreshold'."
+        "No code block with duplication > #{threshold}.\nTo change this limit, check README file."
       else
-        raise "#{flay.masses.size} code block(s) with duplicated data with threshold #{threshold}:\n#{flay.report_string}.\nPara alterar este limite, edite o arquivo config/inotegration.yml e altere a chave 'MaximumFlayThreshold'."
+        raise "#{flay.masses.size} code block(s) with duplicated data with threshold #{threshold}:\n#{flay.report_string}.\nTo change this limit, check README file."
       end
     end
 
@@ -166,7 +178,7 @@ DEFAULT_CONFIG_FILE
         File.open 'tmp/roodi.yml', 'w' do |f|
           f.puts inotegration_config['RoodiConfig'].to_yaml
         end
-        str = `roodi -config=tmp/roodi.yml #{files_to_analyze}`
+        str = `roodi -config=tmp/roodi.yml #{files_to_analyse}`
       end
       if str.include?('Found 0 errors')
         str
@@ -175,7 +187,6 @@ DEFAULT_CONFIG_FILE
       end        
     end
     
-=end
     analysis.make 'Code Quality (Reek)', Result::WARNING do
       if inotegration_config['ReekConfig'].blank?
         File.delete 'site.reek' if File.exists? 'site.reek'
@@ -185,7 +196,7 @@ DEFAULT_CONFIG_FILE
         end
       end
       begin
-        str = `reek #{files_to_analyze}`
+        str = `reek #{files_to_analyse}`
         if str.blank?
           "No bad smells found in this project"
         else

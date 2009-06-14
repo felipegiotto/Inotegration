@@ -13,8 +13,8 @@ ActiveRecord::Schema.define(:version => 20090614005743) do
 
   create_table "analyses", :force => true do |t|
     t.integer  "project_id"
-    t.text     "texto"
-    t.string   "dados_do_commit"
+    t.text     "migration_data"
+    t.string   "commit_data"
     t.boolean  "finished"
     t.datetime "created_at"
     t.datetime "updated_at"

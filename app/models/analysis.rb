@@ -7,7 +7,7 @@ class Analysis < ActiveRecord::Base
     if !finished?
       'Running'
     elsif results.all?{|result| result.situation == Result::APPROVED}
-      'Approved'
+      'Passed'
     elsif results.any?{|result| result.situation == Result::FAIL}
       'Failed'
     else

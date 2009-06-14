@@ -1,6 +1,10 @@
-	<h3 class="<%= analysis.situation_verbose %>"><%= analysis.created_at %></h3>
-	<p>Dados do commit: <pre><%=h analysis.dados_do_commit %></pre></p>
-	<pre><%=h analysis.texto %></pre>
+	<h3 class="<%= analysis.situation_verbose %>"><%= analysis.created_at %> <%= link_to_function '?' do |page| page.visual_effect :toggle_blind, "data_#{analysis.id}"; end %></h3>
+    <div id="data_<%= analysis.id %>" style="display:none">
+    	<p><b>Commit Data: </b><pre><%=h analysis.commit_data %></pre></p>
+    	<% unless analysis.migration_data.blank? %>
+    	<p><b>Migration Data: </b><pre><%=h analysis.migration_data %></pre></p>
+    	<% end %>
+	</div>
 	<ul>
 	<% analysis.results.each do |result| %>
 	  <li class="<%= result.situation_verbose %>">
