@@ -7,7 +7,7 @@ with RubyOnRails, without needing to edit giant XML files.
 Inotegration runs any tests, specs and metrics inside your project.
 
 PLEASE! Feel free to send suggestions, patches, complains, bugs, anything related 
-to Inotegration to me (felipegiotto@gmail.com), I'll answer as soon as
+to Inotegration to me (felipegiotto a gmail.com), I'll answer as soon as
 possible!
 
 == Getting Started
@@ -27,7 +27,7 @@ the updates in the production database. If you need to change this behavior, typ
 
 == Information
 
-Inotegration was created by Felipe Giotto (felipegiotto@gmail.com) from 
+Inotegration was created by Felipe Giotto (felipegiotto a gmail.com) from 
 Inovare (http://www.inovare.net) and was inspired by Marty Andrews 
 (http://blog.martyandrews.net), more specifically by one of his posts, 
 "Enforcing Ruby code quality" (http://blog.martyandrews.net/2009/05/enforcing-ruby-code-quality.html).
