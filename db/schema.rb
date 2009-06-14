@@ -12,14 +12,14 @@
 ActiveRecord::Schema.define(:version => 20090614005743) do
 
   create_table "analises", :force => true do |t|
-    t.integer  "projeto_id"
+    t.integer  "project_id"
     t.text     "texto"
     t.string   "dados_do_commit"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "projetos", :force => true do |t|
+  create_table "projects", :force => true do |t|
     t.string   "nome"
     t.string   "pasta"
     t.datetime "created_at"

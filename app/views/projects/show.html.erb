@@ -1,0 +1,37 @@
+<h1 class="<%= @project.situation_verbose %>"><%=h @project.nome %></h1>
+
+<pre><%=h @project.descricao %></pre>
+
+<p>
+  <b>Situação:</b>
+  <%= @project.situation_verbose %>
+</p>
+
+<p>
+  <b>Pasta:</b>
+  <%=h @project.pasta %>
+</p>
+
+<p>
+  <b>Repositório:</b>
+  <%= @project.repositorio %>
+</p>
+
+<p>
+  <b>Dados do último commit:</b>
+  <pre><%= @project.dados_do_ultimo_commit %></pre>
+</p>
+
+<%= link_to 'Alterar', edit_project_path(@project) %> |
+<%= link_to 'Analisar', analisar_project_path(@project), :method => :post %> |
+<%= link_to 'Voltar', projects_path %>
+
+<h2>Últimas Análises</h2>
+
+<% @project.analises.each do |analise| %>
+
+	<div id="analise_<%= analise.id %>">
+	<h3 class="<%= analise.situation_verbose %>"><%= link_to_remote analise.created_at, :url => show_analysis_project_path(@project, :analysis_id => analise.id) %></h3>
+	</div>
+
+<% end %>

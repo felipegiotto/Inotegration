@@ -1,7 +1,7 @@
 class CreateAnalises < ActiveRecord::Migration
   def self.up
     create_table :analises do |t|
-      t.integer :projeto_id
+      t.integer :project_id
       t.text :texto
       t.string :dados_do_commit
       t.timestamps

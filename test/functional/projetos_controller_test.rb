@@ -4,7 +4,7 @@ class ProjetosControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:projetos)
+    assert_not_nil assigns(:projects)
   end
 
   test "should get new" do
@@ -12,34 +12,34 @@ class ProjetosControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should create projeto" do
+  test "should create project" do
     assert_difference('Projeto.count') do
-      post :create, :projeto => { }
+      post :create, :project => { }
     end
 
-    assert_redirected_to projeto_path(assigns(:projeto))
+    assert_redirected_to project_path(assigns(:project))
   end
 
-  test "should show projeto" do
-    get :show, :id => projetos(:one).to_param
+  test "should show project" do
+    get :show, :id => projects(:one).to_param
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => projetos(:one).to_param
+    get :edit, :id => projects(:one).to_param
     assert_response :success
   end
 
-  test "should update projeto" do
-    put :update, :id => projetos(:one).to_param, :projeto => { }
-    assert_redirected_to projeto_path(assigns(:projeto))
+  test "should update project" do
+    put :update, :id => projects(:one).to_param, :project => { }
+    assert_redirected_to project_path(assigns(:project))
   end
 
-  test "should destroy projeto" do
+  test "should destroy project" do
     assert_difference('Projeto.count', -1) do
-      delete :destroy, :id => projetos(:one).to_param
+      delete :destroy, :id => projects(:one).to_param
     end
 
-    assert_redirected_to projetos_path
+    assert_redirected_to projects_path
   end
 end

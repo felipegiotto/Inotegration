@@ -1,6 +1,6 @@
-class CreateProjetos < ActiveRecord::Migration
+class CreateProjects < ActiveRecord::Migration
   def self.up
-    create_table :projetos do |t|
+    create_table :projects do |t|
       t.string :nome
       t.string :pasta
       
@@ -9,6 +9,6 @@ class CreateProjetos < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :projetos
+    drop_table :projects
   end
 end

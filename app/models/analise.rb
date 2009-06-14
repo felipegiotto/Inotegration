@@ -1,6 +1,6 @@
 class Analise < ActiveRecord::Base
 
-  belongs_to :projeto
+  belongs_to :project
   has_many :resultados, :dependent => :destroy
   
   def situation_verbose

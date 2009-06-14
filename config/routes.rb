@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :projetos, :member => { :analisar => :post, 
+  map.resources :projects, :member => { :analisar => :post, 
                                         :show_analysis => :post }
 
   # The priority is based upon order of creation: first created -> highest priority.

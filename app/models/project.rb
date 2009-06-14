@@ -1,17 +1,17 @@
-class Projeto < ActiveRecord::Base
+class Project < ActiveRecord::Base
 
   validates_presence_of :pasta, :nome
   has_many :analises, :order => 'created_at DESC', :dependent => :destroy
 
   def self.identificar_todos
-    Dir.chdir RAILS_ROOT + '/projetos'
+    Dir.chdir RAILS_ROOT + '/projects'
     Dir.glob('*').each do |pasta|
-      Projeto.find_or_create_by_pasta :pasta => pasta, :nome => pasta.humanize
+      Project.find_or_create_by_pasta :pasta => pasta, :nome => pasta.humanize
     end
   end
 
   def pasta_completa
-    RAILS_ROOT + '/projetos/' + self.pasta
+    RAILS_ROOT + '/projects/' + self.pasta
   end
   
   def descricao
@@ -27,7 +27,7 @@ class Projeto < ActiveRecord::Base
     analises.first.try :created_at
   end
   
-  def ir_para_pasta_do_projeto
+  def ir_para_pasta_do_project
     Dir.chdir pasta_completa
   rescue
     false
@@ -44,7 +44,7 @@ class Projeto < ActiveRecord::Base
   end
   
   def dados_do_ultimo_commit
-    ir_para_pasta_do_projeto || return
+    ir_para_pasta_do_project || return
     case repositorio
       when :GIT; `git log -1`
       when :SVN; `svn log -l 1`
@@ -53,7 +53,7 @@ class Projeto < ActiveRecord::Base
   end
   
   def verificar_atualizacoes_e_analisar
-    ir_para_pasta_do_projeto || return
+    ir_para_pasta_do_project || return
     case repositorio
     when :GIT; return if `git pull`.include?('Already up-to-date')
     when :SVN; return if `svn update`.include?('Na revisão')
@@ -64,7 +64,7 @@ class Projeto < ActiveRecord::Base
   end
   
   def analisar
-    ir_para_pasta_do_projeto || return
+    ir_para_pasta_do_project || return
     
     resultado_migration = `rake db:migrate`
     if resultado_migration.include? 'migrating'
