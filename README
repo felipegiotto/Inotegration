@@ -32,6 +32,11 @@ Inotegration still can't send login and/or passwords. To test this functionality
 type "git pull" or "svn update" inside each of your project's folders. The code should
 be updated automatically, without needing to provide keys/usernames/passwords.
 
+== Emails
+
+In order to send notification e-mails, you need to configure ActionMailer. Inside /config folder, rename
+"email_template.yml" to "email.yml" and write your ActionMailer configuration.
+
 == Information
 
 Inotegration was created by Felipe Giotto (felipegiotto a gmail.com) from 
@@ -89,8 +94,15 @@ according to the good TDD practices, I'll delete each piece of my code,
 make some tests and develop Inotegration again from scratch. These modifications
 will soon be available in Github
 
+== TODO
+
+* The default thresholds for the analysis tools are too tight!
+* Translate Inotegration
+* Model Validations and tests.
+
 == Known Bugs
 
 * There are some problems if you create a symlink inside the projects folder to a non-rails folder.
 * If your SCM need manual authentication, the scheduled analyses will wait forever for the command,
 the rake task will keep running every 5 minutes and soon your memory will be over. ;D
+* Some CSS bugs, line isn't breaking inside <pre> tags.

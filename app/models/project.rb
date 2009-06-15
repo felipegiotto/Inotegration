@@ -117,7 +117,7 @@ ReekConfig:
         str
       else
         raise str
-      end        
+      end
     end
 
     analysis.make 'Unit Tests', Result::FAIL do

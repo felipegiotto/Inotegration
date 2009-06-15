@@ -61,7 +61,22 @@ table .par {
 }
 
 .div_analysis {
-    border: 2px black solid;
     margin: 10px 2px;
     padding: 10px;
 }
+
+.div_analysis.Failed {
+    border: 2px red solid;
+    background-color: #fdd;
+}
+
+.div_analysis.Warnings {
+    border: 2px #990 solid;
+    background-color: #ffd;
+}
+
+.div_analysis.Passed {
+    border: 2px green solid;
+    background-color: #dfd;
+}
+

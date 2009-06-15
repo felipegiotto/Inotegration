@@ -1,0 +1,17 @@
+development:
+  address: smtp.server.com
+  port: 25
+  authentication: plain
+  user_name: user
+  password: pass
+  
+production:
+  address: smtp.server.com
+  port: 25
+  authentication: plain
+  user_name: user
+  password: pass
+
+deliver_config:
+  from: Inotegration CI <inovare@inovare.net>
+  to: your.email@server.com

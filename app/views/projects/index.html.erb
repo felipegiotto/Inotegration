@@ -15,15 +15,13 @@
 <table>
   <tr class="<%= cycle 'impar', 'par' %>">
     <th>Name</th>
-    <th>Build Status</th>
-    <th>Last Build</th>
+    <th>Last Build Status</th>
   </tr>
 
 <% @projects.each do |project| %>
   <tr class="<%= project.situation_verbose %> <%= cycle 'impar', 'par' %>">
     <td><%= link_to h(project.nome), project %></td>
-    <td><%=h project.situation_verbose %></td>
-    <td><%= format_date(project.last_analysis_at) rescue 'Never' %></td>
+    <td><%=h project.situation_verbose %> (<%= format_date(project.last_analysis_at) rescue 'Never' %>)</td>
   </tr>
 <% end %>
 </table>

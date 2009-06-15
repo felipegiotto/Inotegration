@@ -30,4 +30,9 @@ class Analysis < ActiveRecord::Base
     self.save
   end
 
+  def after_create
+    Thread.new do
+      Mailer.deliver_project_build_status(self) rescue nil
+    end
+  end
 end
