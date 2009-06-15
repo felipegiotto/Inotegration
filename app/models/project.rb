@@ -46,9 +46,9 @@ class Project < ActiveRecord::Base
   def last_commit_data
     go_to_project_folder || return
     case repository_type
-      when :GIT; `git log -1`
-      when :SVN; `svn log -l 1`
-      else 'No SCM in use'
+    when :GIT; `git log -1`
+    when :SVN; `svn log -l 1`
+    else 'No SCM in use'
     end
   end
   
@@ -71,8 +71,8 @@ class Project < ActiveRecord::Base
   
   def create_default_config_file_if_needed
     unless File.exists?(folder_path + '/config/inotegration.yml')
-    File.open folder_path + '/config/inotegration.yml', 'w' do |f|
-      f.puts <<-DEFAULT_CONFIG_FILE
+      File.open folder_path + '/config/inotegration.yml', 'w' do |f|
+        f.puts <<-DEFAULT_CONFIG_FILE
 MaximumFlogComplexity: 10
 MaximumFlayThreshold: 10
 RoodiConfig:
@@ -82,7 +82,7 @@ ReekConfig:
   # Insert here your custom reek checks, like:
   # NestedIterators: 
   #  enabled: false
-DEFAULT_CONFIG_FILE
+        DEFAULT_CONFIG_FILE
       end
     end
   end

@@ -15,15 +15,22 @@ possible!
 To use Inotegration, you have to follow these steps:
 
 1. Install any missing gems with "sudo rake gems:install"
-2. Create simlinks inside the "projects" folder to each of your projects.
+2. Create symlinks inside the "projects" folder to each of your projects.
 3. Run "rake projects:schedule_analyses" once to update your crontab and 
 schedule periodical analyses
 4. There's no fourth step! You're ready to use Inotegration! Migrate your production 
-database, start the server and try!
+database, start the server and try! Maybe you'll need to wait 5 minutes for the scheduled task to
+run. If you're not patient enough, type "rake projects:analyse RAILS_ENV=production" and
+start using Inotegration NOW!
 
 You need to use the production environment, because the "whenever" gem schedules 
 the updates in the production database. If you need to change this behavior, type
 "crontab -e" manually and change the RAILS_ENV manually.
+
+Make sure to use some RSA key or equivalent to authorize your GIT and SVN projects, because
+Inotegration still can't send login and/or passwords. To test this functionality, you may
+type "git pull" or "svn update" inside each of your project's folders. The code should
+be updated automatically, without needing to provide keys/usernames/passwords.
 
 == Information
 
@@ -82,3 +89,8 @@ according to the good TDD practices, I'll delete each piece of my code,
 make some tests and develop Inotegration again from scratch. These modifications
 will soon be available in Github
 
+== Known Bugs
+
+* There are some problems if you create a symlink inside the projects folder to a non-rails folder.
+* If your SCM need manual authentication, the scheduled analyses will wait forever for the command,
+the rake task will keep running every 5 minutes and soon your memory will be over. ;D
