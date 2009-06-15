@@ -97,13 +97,10 @@ will soon be available in Github
 == TODO
 
 * The default thresholds for the analysis tools are too tight!
-* Translate Inotegration
 * Model Validations and tests.
-* Message "production database is not configured" running rake task
+* Make the analyse method thread-safe.
 
 == Known Bugs
 
-* There are some problems if you create a symlink inside the projects folder to a non-rails folder.
 * If your SCM need manual authentication, the scheduled analyses will wait forever for the command,
 the rake task will keep running every 5 minutes and soon your memory will be over. ;D
-* Some CSS bugs, line isn't breaking inside <pre> tags.

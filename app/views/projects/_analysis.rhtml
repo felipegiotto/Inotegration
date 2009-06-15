@@ -1,15 +1,15 @@
 	<h3 class="<%= analysis.situation_verbose %>"><%= format_date analysis.created_at %> - <%= analysis.situation_verbose %> <%= link_to_function '?', :class => 'more_information' do |page| page.visual_effect :toggle_blind, "data_#{analysis.id}"; end %></h3>
     <div id="data_<%= analysis.id %>" style="display:none">
-    	<p><b>Commit Data: </b><pre><%=h analysis.commit_data %></pre></p>
+    	<p><b>Commit Data: </b><%= pre_text analysis.commit_data %></p>
     	<% unless analysis.migration_data.blank? %>
-    	<p><b>Migration Data: </b><pre><%=h analysis.migration_data %></pre></p>
+    	<p><b>Migration Data: </b><%= pre_text analysis.migration_data %></p>
     	<% end %>
 	</div>
 	<ul>
 	<% analysis.results.each do |result| %>
 	  <li class="<%= result.situation_verbose %>">
 	  	<b><%=h result.nome %></b> (<%= result.tempo %>s)
-	  	<pre><%=h result.texto %></pre>
+	  	<%= pre_text result.texto %>
 	  </li>
 	<% end %>
 	</ul>

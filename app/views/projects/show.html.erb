@@ -8,7 +8,7 @@
 <div id="more_info" style="display:none">
 
 <% if @project.description %>
-<pre><%=h @project.description %></pre>
+<%= pre_text @project.description %>
 <% end %>
 
 <% if @project.repository_type %>
@@ -19,7 +19,7 @@
 
 <p>
   <b>Last Commit Data:</b>
-  <pre><%= @project.last_commit_data %></pre>
+  <%= pre_text @project.last_commit_data %>
 </p>
 
 <% else %>

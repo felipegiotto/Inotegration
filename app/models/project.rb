@@ -5,7 +5,8 @@ class Project < ActiveRecord::Base
 
   def self.identify_all
     Dir.chdir RAILS_ROOT + '/projects'
-    Dir.glob('*').each do |folder_name|
+    Dir.glob('*/config/environment.rb').each do |project|
+      folder_name = project.match(%r{(.*)/config/environment.rb})[1]
       Project.find_or_create_by_folder_name :folder_name => folder_name, :nome => folder_name.humanize
     end
   end
@@ -97,9 +98,14 @@ ReekConfig:
       migration_info = nil
     end
 
+    return if Dir.glob('config').empty? || Dir.glob('lib').empty?
+
     folder_names_to_analyse = ['app']
-    folder_names_to_analyse << 'lib' unless Dir.glob('lib/*.rb').empty?
-    files_to_analyse = folder_names_to_analyse.collect{|folder_name| "#{folder_name}/**/*.rb"}.join ' '
+    files_to_analyse = 'app/**/*.rb'
+    unless Dir.glob('lib/*.rb').empty?
+      folder_names_to_analyse << 'lib'
+      files_to_analyse += ' lib/*.rb'
+    end
 
     create_default_config_file_if_needed
     

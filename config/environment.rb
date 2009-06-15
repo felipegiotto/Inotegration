@@ -18,6 +18,7 @@ Rails::Initializer.run do |config|
   config.gem 'flog'
   config.gem 'flay'
   config.gem 'roodi'
+  config.gem 'reek'
   config.gem 'chronic'
   config.gem 'javan-whenever', :source => 'http://gems.github.com', :lib => false
   # config.gem "bj"
