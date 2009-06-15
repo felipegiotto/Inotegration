@@ -80,3 +80,8 @@ table .par {
     background-color: #dfd;
 }
 
+.div_analysis.Running {
+    border: 2px black solid;
+    background-color: #ddd;
+}
+

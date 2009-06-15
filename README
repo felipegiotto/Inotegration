@@ -99,6 +99,7 @@ will soon be available in Github
 * The default thresholds for the analysis tools are too tight!
 * Translate Inotegration
 * Model Validations and tests.
+* Message "production database is not configured" running rake task
 
 == Known Bugs
 

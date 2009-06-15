@@ -90,7 +90,7 @@ ReekConfig:
   def analyse
     go_to_project_folder || return
     
-    migration_info = `rake db:migrate`
+    migration_info = `rake db:migrate RAILS_ENV=development`
     if migration_info.include? 'migrating'
       `rake db:test:prepare`
     else
@@ -111,7 +111,7 @@ ReekConfig:
     analysis.save!
     
     analysis.make 'Spec', Result::FAIL do
-      str = `rake spec`
+      str = `rake spec RAILS_ENV=test`
       break if !str.include? 'Finished'
       if str.include?('0 failures')
         str
