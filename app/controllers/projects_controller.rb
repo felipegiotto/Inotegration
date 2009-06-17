@@ -24,5 +24,9 @@ class ProjectsController < ApplicationController
       page.replace_html "analysis_#{@analysis.id}", :partial => 'analysis'
     end
   end
-  
+
+  def generate_rake_file
+    @project = Project.find(params[:id])
+    send_data @project.generate_rake_file, :filename => 'inotegration.rake'
+  end
 end

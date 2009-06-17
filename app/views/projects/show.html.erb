@@ -11,6 +11,13 @@
 <%= pre_text @project.description %>
 <% end %>
 
+<p>
+  <b>Click <%= link_to 'here', generate_rake_file_project_path(@project), :method => :post %> to download a task file. <%= link_to_function "What's this?" do |page| page.show :rake_explanation; end %></b><br />
+  <span id="rake_explanation" style="display:none">
+    Download this file and save it to your lib/tasks folder. Then, you'll be able to run 'rake inotegration:all' and analyse your code locally, before sending it to the repository. You MUST have the config/inotegration.yml file locally to run this rake task.
+  </span>
+</p>
+
 <% if @project.repository_type %>
 <p>
   <b>Repository Type:</b>

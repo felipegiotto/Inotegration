@@ -88,6 +88,19 @@ ReekConfig:
     end
   end
 
+  PREPARE_ENVIRONMENT = <<-PREPARE_ENVIRONMENT
+    folder_names_to_analyse = ['app']
+    files_to_analyse = 'app/**/*.rb'
+    unless Dir.glob('lib/*.rb').empty?
+      folder_names_to_analyse << 'lib'
+      files_to_analyse += ' lib/*.rb'
+    end
+PREPARE_ENVIRONMENT
+
+  def generate_rake_file
+    ERB.new(File.read(RAILS_ROOT + '/app/views/projects/rake_task.erb')).result(binding)
+  end
+
   def analyse
     go_to_project_folder || return
     
@@ -100,119 +113,23 @@ ReekConfig:
 
     return if Dir.glob('config').empty? || Dir.glob('lib').empty?
 
-    folder_names_to_analyse = ['app']
-    files_to_analyse = 'app/**/*.rb'
-    unless Dir.glob('lib/*.rb').empty?
-      folder_names_to_analyse << 'lib'
-      files_to_analyse += ' lib/*.rb'
-    end
-
     create_default_config_file_if_needed
-    
     inotegration_config = YAML::load_file(folder_path + '/config/inotegration.yml')
+    
+    eval PREPARE_ENVIRONMENT
 
     analysis = self.analyses.build
     analysis.commit_data = self.last_commit_data
     analysis.migration_data = migration_info
     analysis.save!
-    
-    analysis.make 'Spec', Result::FAIL do
-      str = `rake spec RAILS_ENV=test`
-      break if !str.include? 'Finished'
-      if str.include?('0 failures')
-        str
-      else
-        raise str
+
+    InotegrationTests.constants.each do |test|
+      test_data = InotegrationTests.const_get test
+      analysis.make test_data[0], test_data[1] do
+        eval test_data[2]
       end
     end
 
-    analysis.make 'Unit Tests', Result::FAIL do
-      str = `rake test:units`
-      break if !str.include? 'Finished'
-      if str.include?('0 failures, 0 errors')
-        str
-      else
-        raise str
-      end        
-    end
-
-    analysis.make 'Functional Tests', Result::FAIL do
-      str = `rake test:functionals`
-      break if !str.include? 'Finished'
-      if str.include?('0 failures, 0 errors')
-        str
-      else
-        raise str
-      end        
-    end
-
-    analysis.make 'Code Complexity (Flog)', Result::WARNING do
-      flog = Flog.new
-      flog.flog_files folder_names_to_analyse
-      threshold = inotegration_config['MaximumFlogComplexity'].to_i
-    
-      bad_methods = flog.totals.select do |name, score|
-        score > threshold
-      end
-      
-      if bad_methods.empty?
-        "No method found with complexity > #{threshold}.\nTo change this limit, check README file."
-      else
-        bad_methods = bad_methods.sort { |a,b| a[1] <=> b[1] }.collect do |name, score|
-          "%8.1f: %s" % [score, name]
-        end
-        raise "#{bad_methods.length} method(s) with complexity > #{threshold}:\n#{bad_methods.join("\n")}.\nTo change this limit, check README file."
-      end
-    end
-    
-    analysis.make 'Code Duplication', Result::WARNING do
-      threshold = inotegration_config['MaximumFlayThreshold'].to_i
-      flay = Flay.new({:fuzzy => false, :verbose => false, :mass => threshold})
-      flay.process(*Flay.expand_dirs_to_files(folder_names_to_analyse))
-    
-      if flay.masses.empty?
-        "No code block with duplication > #{threshold}.\nTo change this limit, check README file."
-      else
-        raise "#{flay.masses.size} code block(s) with duplicated data with threshold #{threshold}:\n#{flay.report_string}.\nTo change this limit, check README file."
-      end
-    end
-
-    analysis.make 'Code Quality (Roodi)', Result::WARNING do
-      if inotegration_config['RoodiConfig'].blank?
-        str = `roodi app/**/*.rb lib/**/*.rb`
-      else
-        File.open 'tmp/roodi.yml', 'w' do |f|
-          f.puts inotegration_config['RoodiConfig'].to_yaml
-        end
-        str = `roodi -config=tmp/roodi.yml #{files_to_analyse}`
-      end
-      if str.include?('Found 0 errors')
-        str
-      else
-        raise str
-      end        
-    end
-    
-    analysis.make 'Code Quality (Reek)', Result::WARNING do
-      if inotegration_config['ReekConfig'].blank?
-        File.delete 'site.reek' if File.exists? 'site.reek'
-      else
-        File.open 'site.reek', 'w' do |f|
-          f.puts inotegration_config['ReekConfig'].to_yaml
-        end
-      end
-      begin
-        str = `reek #{files_to_analyse}`
-        if str.blank?
-          "No bad smells found in this project"
-        else
-          raise str
-        end
-      ensure
-        File.delete 'site.reek' if File.exists? 'site.reek'
-      end
-    end
-    
     analysis.make 'rake stats', Result::WARNING do
       `rake stats`
     end

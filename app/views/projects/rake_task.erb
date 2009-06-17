@@ -1,0 +1,34 @@
+namespace :inotegration do
+
+  desc "Run all build test from Inotegration"
+
+  task :all do
+    require 'flog'
+    require 'flay'
+    require 'roodi'
+    require 'reek'
+
+<%= PREPARE_ENVIRONMENT %>
+<%= File.read(RAILS_ROOT + '/config/initializers/flay_modification.rb') %>
+
+    inotegration_config = YAML::load_file(RAILS_ROOT + '/config/inotegration.yml')
+    passed = []
+    failed = {}
+
+    <% InotegrationTests.constants.each do |test| %>
+      <% test_data = InotegrationTests.const_get test %>
+      begin
+        <%= test_data[2] %>
+        passed << '<%= test_data[0] %>'
+      rescue Exception => e
+        failed['<%= test_data[0] %>'] = e.message
+      end
+    <% end %>
+
+    failed.each do |name, result|
+      puts "FAILED: #{name}:\n#{result}"
+    end
+    puts "#{failed.length} FAILED: #{failed.keys.join ', '}\n\n"
+    puts "#{failed.length} PASSED: #{passed.join ', '}"
+  end
+end
