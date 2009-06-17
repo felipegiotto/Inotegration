@@ -60,8 +60,8 @@ class Project < ActiveRecord::Base
   def fetch_modifications
     go_to_project_folder || return
     case repository_type
-    when :GIT; 
-      return if `git pull`.include?('Already up-to-date')
+    when :GIT;
+      return unless `git pull`.include?('files changed')
     when :SVN; 
       output = `svn update`
       return unless output.include?('Atualizado para') || output.include?('Updated to')
