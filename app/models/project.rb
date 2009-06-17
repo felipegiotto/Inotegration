@@ -64,7 +64,7 @@ class Project < ActiveRecord::Base
       return if `git pull`.include?('Already up-to-date')
     when :SVN; 
       output = `svn update`
-      return if output.blank? || output.include?('Na revisão') || output.include?('At revision')
+      return unless output.include?('Atualizado para') || output.include?('Updated to')
     else return
     end
     return true
